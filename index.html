@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste Paylaşımı - Film & Dizi Uygulaması</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 400px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+        .button:hover {
+            background: #764ba2;
+        }
+        .info {
+            color: #666;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎬 Liste Açılıyor...</h1>
+        <p id="message">Uygulama açılıyor, lütfen bekleyin...</p>
+        <button class="button" onclick="openApp()">Uygulamayı Aç</button>
+        <p class="info">Eğer uygulama açılmadıysa, önce uygulamayı indirmeniz gerekebilir.</p>
+    </div>
+
+    <script>
+        function openApp() {
+            const params = new URLSearchParams(window.location.search);
+            const ownerId = params.get('ownerId');
+            const listId = params.get('listId');
+            
+            if (ownerId && listId) {
+                const appUrl = `filmdiziapp://list?ownerId=${ownerId}&listId=${listId}`;
+                window.location.href = appUrl;
+                
+                // 2 saniye sonra kontrol et
+                setTimeout(() => {
+                    document.getElementById('message').textContent = 
+                        'Uygulama yüklü değilse, butona tekrar tıklayın.';
+                }, 2000);
+            } else {
+                document.getElementById('message').textContent = 'Geçersiz link!';
+            }
+        }
+        
+        // Sayfa yüklendiğinde otomatik aç
+        window.onload = openApp;
+    </script>
+</body>
+</html>
