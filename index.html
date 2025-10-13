@@ -36,6 +36,9 @@
             font-weight: bold;
             margin-top: 20px;
             transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
         }
         .button:hover {
             background: #764ba2;
@@ -45,6 +48,15 @@
             margin-top: 20px;
             font-size: 14px;
         }
+        .debug {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 15px;
+            font-size: 12px;
+            color: #333;
+            word-break: break-all;
+        }
     </style>
 </head>
 <body>
@@ -53,16 +65,36 @@
         <p id="message">Uygulama açılıyor, lütfen bekleyin...</p>
         <button class="button" onclick="openApp()">Uygulamayı Aç</button>
         <p class="info">Eğer uygulama açılmadıysa, önce uygulamayı indirmeniz gerekebilir.</p>
+        
+        <!-- ✅ Debug bilgisi -->
+        <div class="debug" id="debug"></div>
     </div>
-
     <script>
         function openApp() {
             const params = new URLSearchParams(window.location.search);
             const ownerId = params.get('ownerId');
             const listId = params.get('listId');
+            const token = params.get('token'); // ✅ YENİ: Token'ı al
+            
+            // ✅ Debug için ekrana yaz
+            const debugDiv = document.getElementById('debug');
+            debugDiv.innerHTML = `
+                <strong>Debug Bilgisi:</strong><br>
+                ownerId: ${ownerId || 'YOK'}<br>
+                listId: ${listId || 'YOK'}<br>
+                token: ${token || 'YOK'}
+            `;
             
             if (ownerId && listId) {
-                const appUrl = `filmdiziapp://list?ownerId=${ownerId}&listId=${listId}`;
+                // ✅ Token varsa onu da ekle
+                let appUrl = `filmdiziapp://list?ownerId=${ownerId}&listId=${listId}`;
+                if (token) {
+                    appUrl += `&token=${token}`;
+                }
+                
+                console.log('Opening app with URL:', appUrl);
+                debugDiv.innerHTML += `<br><br><strong>Uygulama URL'si:</strong><br>${appUrl}`;
+                
                 window.location.href = appUrl;
                 
                 // 2 saniye sonra kontrol et
@@ -71,7 +103,8 @@
                         'Uygulama yüklü değilse, butona tekrar tıklayın.';
                 }, 2000);
             } else {
-                document.getElementById('message').textContent = 'Geçersiz link!';
+                document.getElementById('message').textContent = 'Geçersiz link! ownerId veya listId eksik.';
+                document.getElementById('message').style.color = 'red';
             }
         }
         
