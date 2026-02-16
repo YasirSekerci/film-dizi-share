@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Bölüm Önerisi" />
+    <meta property="og:description" content="Bu bölümü kesinlikle izlemelisin! Detaylar uygulamada." />
+    <meta property="og:image" content="https://yasirsekerci.github.io/film-dizi-share/app_icon.png" />
+    <meta property="og:type" content="video.episode" />
+    
+    <title>Bölüm Paylaşımı - Film & Dizi Uygulaması</title>
+    
+    <style>
+        /* ... tv.html içindeki style etiketinin içeriğini buraya aynen kopyala ... */
+        /* Sadece body background'ı biraz değiştirebilirsin fark yaratmak için */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #141E30 0%, #243B55 100%); /* Biraz daha koyu mavi */
+            padding: 20px;
+            color: white;
+        }
+        /* ... diğer css kodları aynı kalsın ... */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">🎬</div> <h1>Bölüm Detayı Açılıyor...</h1>
+        <p class="subtitle">İlgili sahne ve oyuncular yükleniyor</p>
+        
+        <div id="message">
+            Bağlantı kuruluyor<span class="loader"></span>
+        </div>
+        
+        <button class="button" onclick="openApp()">
+            🚀 Uygulamada İzle
+        </button>
+        
+        <p class="info">
+            💡 Eğer uygulama yüklü değilse, markete yönlendirileceksiniz.
+        </button>
+    </div>
+
+    <script>
+        function openApp() {
+            const params = new URLSearchParams(window.location.search);
+            const tvId = params.get('id');
+            const season = params.get('s'); // Season Number
+            const episode = params.get('e'); // Episode Number
+            
+            if (tvId && season && episode) {
+                // DEEP LINK SCHEME: filmdiziapp://episode?id=123&s=1&e=5
+                const appUrl = `filmdiziapp://episode?id=${tvId}&s=${season}&e=${episode}`;
+                const messageEl = document.getElementById('message');
+                
+                messageEl.innerHTML = 'Uygulama başlatılıyor<span class="loader"></span>';
+                
+                // 1. Uygulamayı açmaya çalış
+                window.location.href = appUrl;
+                
+                // 2. Açılmazsa (Timeout) markete veya ana sayfaya yönlendir
+                setTimeout(() => {
+                    messageEl.innerHTML = '⚠️ Uygulama bulunamadı. Lütfen yükleyin.';
+                    // Buraya Google Play linkini koyabilirsin:
+                    // window.location.href = "https://play.google.com/store/apps/details?id=com.yasir.filmdiziuygulamasi";
+                }, 2500);
+            } else {
+                document.getElementById('message').innerHTML = '❌ Eksik veya hatalı bölüm linki!';
+            }
+        }
+        
+        // Sayfa yüklendiğinde otomatik tetikle
+        window.onload = function() {
+            setTimeout(openApp, 800);
+        };
+    </script>
+</body>
+</html>
