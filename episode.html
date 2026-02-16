@@ -144,23 +144,30 @@
             const tvId = params.get('id');
             const season = params.get('s'); // Season Number
             const episode = params.get('e'); // Episode Number
+
+            // Paket ismin (AndroidManifest.xml'deki package="")
+            const packageName = "com.yasir.filmdiziuygulamasi";
             
             if (tvId && season && episode) {
+                const messageEl = document.getElementById('message');
+                messageEl.innerHTML = 'Uygulama başlatılıyor<span class="loader"></span>';
+
                 // DEEP LINK SCHEME: filmdiziapp://episode?id=123&s=1&e=5
                 const appUrl = `filmdiziapp://episode?id=${tvId}&s=${season}&e=${episode}`;
-                const messageEl = document.getElementById('message');
-                
-                messageEl.innerHTML = 'Uygulama başlatılıyor<span class="loader"></span>';
-                
+
+                // Url oluşturuyoruz: filmdiziapp://episode?id=...
+                // Ancak bunu Chrome'un sevdiği formatta yazıyoruz:
+                const intentUrl = `intent://episode?id=${tvId}&s=${season}&e=${episode}#Intent;scheme=filmdiziapp;package=${packageName};end`;
+                                
                 // 1. Uygulamayı açmaya çalış
-                window.location.href = appUrl;
+                window.location.href = intentUrl;
                 
                 // 2. Açılmazsa (Timeout) markete veya ana sayfaya yönlendir
                 setTimeout(() => {
-                    messageEl.innerHTML = '⚠️ Uygulama bulunamadı. Lütfen yükleyin.';
+                    messageEl.innerHTML = '⚠️ Otomatik açılmadıysa butona tıklayın.';
                     // Buraya Google Play linkini koyabilirsin:
                     // window.location.href = "https://play.google.com/store/apps/details?id=com.yasir.filmdiziuygulamasi";
-                }, 2500);
+                }, 2000);
             } else {
                 document.getElementById('message').innerHTML = '❌ Eksik veya hatalı bölüm linki!';
             }
@@ -168,7 +175,7 @@
         
         // Sayfa yüklendiğinde otomatik tetikle
         window.onload = function() {
-            setTimeout(openApp, 800);
+            setTimeout(openApp, 500);
         };
     </script>
 </body>
