@@ -132,19 +132,24 @@
         function openApp() {
             const params = new URLSearchParams(window.location.search);
             const tvId = params.get('id');
+
+            // Paket ismin
+            const packageName = "com.yasir.filmdiziuygulamasi";
             
             if (tvId) {
-                const appUrl = `filmdiziapp://tv?id=${tvId}`;
                 const messageEl = document.getElementById('message');
-                
                 messageEl.innerHTML = 'Uygulama açılıyor<span class="loader"></span>';
+
+                const appUrl = `filmdiziapp://tv?id=${tvId}`;
+                // YENİ YÖNTEM: Intent Scheme
+                const intentUrl = `intent://tv?id=${tvId}#Intent;scheme=filmdiziapp;package=${packageName};end`;
                 
                 // Uygulamayı aç
-                window.location.href = appUrl;
+                window.location.href = intentUrl;
                 
                 // 2 saniye sonra mesajı güncelle
                 setTimeout(() => {
-                    messageEl.innerHTML = '⚠️ Uygulama açılmadıysa, butona tekrar tıklayın veya uygulamayı indirin.';
+                       messageEl.innerHTML = '⚠️ Otomatik açılmadıysa butona tıklayın.';
                 }, 2000);
             } else {
                 document.getElementById('message').innerHTML = '❌ Geçersiz dizi linki!';
