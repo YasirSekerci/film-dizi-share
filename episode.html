@@ -13,6 +13,11 @@
     <style>
         /* ... tv.html içindeki style etiketinin içeriğini buraya aynen kopyala ... */
         /* Sadece body background'ı biraz değiştirebilirsin fark yaratmak için */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             display: flex;
@@ -22,6 +27,95 @@
             background: linear-gradient(135deg, #141E30 0%, #243B55 100%); /* Biraz daha koyu mavi */
             padding: 20px;
             color: white;
+        }
+        .container {
+            background: linear-gradient(135deg, #1e2433 0%, #2a3142 100%);
+            padding: 50px 40px;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            text-align: center;
+            max-width: 450px;
+            width: 100%;
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        h1 {
+            color: #ffffff;
+            margin-bottom: 16px;
+            font-size: 28px;
+            font-weight: 700;
+        }
+        .subtitle {
+            color: #B3FFFFFF;
+            margin-bottom: 30px;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        #message {
+            color: #E0E0E0;
+            margin-bottom: 30px;
+            font-size: 15px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .button {
+            display: inline-block;
+            padding: 16px 48px;
+            background: linear-gradient(135deg, #4FC3F7 0%, #2196F3 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(79, 195, 247, 0.3);
+        }
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 195, 247, 0.4);
+        }
+        .button:active {
+            transform: translateY(0);
+        }
+        .info {
+            color: #B3FFFFFF;
+            margin-top: 24px;
+            font-size: 13px;
+            line-height: 1.6;
+            padding: 12px;
+            background: rgba(255, 193, 7, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 193, 7, 0.2);
+        }
+        .loader {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
         /* ... diğer css kodları aynı kalsın ... */
     </style>
