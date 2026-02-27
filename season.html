@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta property="og:title" content="Sezon Önerisi" />
-    <meta property="og:description" content="Bu sezonu mutlaka izlemelisin!" />
-    <meta property="og:type" content="website" />
+    <meta property="og:description" content="Bu sezonu kesinlikle izlemelisin! Tüm bölümler ve detaylar uygulamada." />
+    <meta property="og:image" content="https://yasirsekerci.github.io/film-dizi-share/app_icon.png" />
+    <meta property="og:type" content="video.tv_show" />
+    
     <title>Sezon Paylaşımı - Film & Dizi Uygulaması</title>
+    
     <style>
         * {
             margin: 0;
@@ -19,8 +22,10 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: linear-gradient(135deg, #0C111B 0%, #1a1f2e 100%);
+            /* Sezon sayfası için çok hafif mor/lacivert bir gradient tonu */
+            background: linear-gradient(135deg, #1A1A2E 0%, #16213E 100%); 
             padding: 20px;
+            color: white;
         }
         .container {
             background: linear-gradient(135deg, #1e2433 0%, #2a3142 100%);
@@ -69,21 +74,21 @@
         .button {
             display: inline-block;
             padding: 16px 48px;
-            background: linear-gradient(135deg, #4FC3F7 0%, #2196F3 100%);
-            color: white;
+            background: linear-gradient(135deg, #FFC107 0%, #FF9800 100%); /* Sezon için özel sarı/turuncu buton */
+            color: #1A1A1A;
             text-decoration: none;
             border-radius: 12px;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 16px;
             margin-top: 10px;
             transition: all 0.3s ease;
             border: none;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(79, 195, 247, 0.3);
+            box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
         }
         .button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(79, 195, 247, 0.4);
+            box-shadow: 0 6px 20px rgba(255, 193, 7, 0.5);
         }
         .button:active {
             transform: translateY(0);
@@ -94,9 +99,9 @@
             font-size: 13px;
             line-height: 1.6;
             padding: 12px;
-            background: rgba(255, 193, 7, 0.1);
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 8px;
-            border: 1px solid rgba(255, 193, 7, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         .loader {
             display: inline-block;
@@ -107,6 +112,7 @@
             border-top-color: #fff;
             animation: spin 1s ease-in-out infinite;
             margin-left: 10px;
+            vertical-align: middle;
         }
         @keyframes spin {
             to { transform: rotate(360deg); }
@@ -115,44 +121,57 @@
 </head>
 <body>
     <div class="container">
-        <div class="icon">📺</div>
+        <div class="icon">🍿</div> 
         <h1>Sezon Detayı Açılıyor...</h1>
-        <p class="subtitle">Sezon bilgileri yükleniyor</p>
+        <p class="subtitle">Bölümler ve sezon özetiniz yükleniyor</p>
+        
         <div id="message">
-            Uygulama açılıyor<span class="loader"></span>
+            Bağlantı kuruluyor<span class="loader"></span>
         </div>
+        
         <button class="button" onclick="openApp()">
-            📱 Uygulamayı Aç
+            🚀 Uygulamada İncele
         </button>
+        
         <p class="info">
-            💡 Eğer uygulama yüklü değilse, önce uygulamayı indirmeniz gerekiyor.
+            💡 Eğer uygulama yüklü değilse, indirmek için markete yönlendirileceksiniz.
         </p>
     </div>
+
     <script>
         function openApp() {
             const params = new URLSearchParams(window.location.search);
-            const tvId = params.get('tvId');
-            const seasonNumber = params.get('seasonNumber');
+            const tvId = params.get('id');
+            const season = params.get('s'); // Season Number
+
+            // Paket ismin
+            const packageName = "com.yasir.filmdiziuygulamasi";
             
-            if (tvId && seasonNumber) {
-                const appUrl = `filmdiziapp://season?tvId=${tvId}&seasonNumber=${seasonNumber}`;
+            // Sezon için episode parametresi yok, sadece id ve s yeterli
+            if (tvId && season) {
                 const messageEl = document.getElementById('message');
+                messageEl.innerHTML = 'Uygulama başlatılıyor<span class="loader"></span>';
+
+                // DEEP LINK SCHEME: filmdiziapp://season?id=123&s=1
+                const appUrl = `filmdiziapp://season?id=${tvId}&s=${season}`;
+
+                // Chrome Intent URL
+                const intentUrl = `intent://season?id=${tvId}&s=${season}#Intent;scheme=filmdiziapp;package=${packageName};end`;
+                                
+                // 1. Uygulamayı açmaya çalış
+                window.location.href = intentUrl;
                 
-                messageEl.innerHTML = 'Uygulama açılıyor<span class="loader"></span>';
-                
-                // Uygulamayı aç
-                window.location.href = appUrl;
-                
-                // 2 saniye sonra mesajı güncelle
+                // 2. Açılmazsa (Timeout) markete yönlendir
                 setTimeout(() => {
-                    messageEl.innerHTML = '⚠️ Uygulama açılmadıysa, butona tekrar tıklayın veya uygulamayı indirin.';
+                    messageEl.innerHTML = '⚠️ Otomatik açılmadıysa butona tıklayın.';
+                    // window.location.href = "https://play.google.com/store/apps/details?id=com.yasir.filmdiziuygulamasi";
                 }, 2000);
             } else {
-                document.getElementById('message').innerHTML = '❌ Geçersiz sezon linki!';
+                document.getElementById('message').innerHTML = '❌ Eksik veya hatalı sezon linki!';
             }
         }
         
-        // Sayfa yüklendiğinde otomatik aç
+        // Sayfa yüklendiğinde otomatik tetikle
         window.onload = function() {
             setTimeout(openApp, 500);
         };
